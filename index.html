@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planeta Carro | Aluguer de Automóveis em Portugal</title>
+    <style>
+        /* CSS Base mais moderno */
+        :root {
+            --brand-blue: #0A2463;
+            --brand-orange: #FB3640;
+            --bg-light: #F4F6F8;
+            --text-main: #2D3142;
+            --text-muted: #6C757D;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-main);
+            background-color: var(--bg-light);
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        /* Header / Nav */
+        header {
+            background: white;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--brand-blue);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand span {
+            color: var(--brand-orange);
+        }
+
+        nav a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: var(--brand-orange);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(to right, rgba(10, 36, 99, 0.9), rgba(10, 36, 99, 0.4)), url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover;
+            padding: 80px 5%;
+            color: white;
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            max-width: 600px;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        /* Formulário de Reserva */
+        .booking-widget {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            max-width: 900px;
+            color: var(--text-main);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 15px;
+            align-items: end;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text-muted);
+        }
+
+        .input-group input, .input-group select {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            background: #f9f9f9;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: var(--brand-blue);
+            background: white;
+        }
+
+        .btn-primary {
+            background-color: var(--brand-orange);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            height: 46px;
+            transition: 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: #e02a33;
+        }
+
+        /* Sinais de Confiança */
+        .trust-bar {
+            background: white;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-around;
+            border-bottom: 1px solid #eee;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            color: var(--brand-blue);
+        }
+
+        /* =========================================
+           NOVA SECÇÃO: STOCK E FILTROS 
+        ========================================= */
+        .fleet-section {
+            padding: 60px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .fleet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .fleet-header h2 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 15px;
+        }
+
+        .filter-select {
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            background-color: white;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .filter-select:focus {
+            border-color: var(--brand-blue);
+        }
+
+        .car-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .car-card {
+            background: white;
+            border-radius: 10px;
+            border: 1px solid #eee;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .car-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Esconder cards filtrados via JS */
+        .car-card.hidden {
+            display: none;
+        }
+
+        .car-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .car-details {
+            padding: 20px;
+            border-top: 1px solid #eee;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .car-category {
+            font-size: 0.8rem;
+            color: var(--brand-orange);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .car-title {
+            font-size: 1.3rem;
+            margin: 5px 0 15px 0;
+        }
+
+        .specs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .price-row {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px dashed #ddd;
+        }
+
+        .price {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--brand-blue);
+        }
+
+        .price small {
+            font-size: 0.8rem;
+            font-weight: normal;
+            color: var(--text-muted);
+        }
+
+        .no-results {
+            text-align: center;
+            grid-column: 1 / -1;
+            padding: 40px;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            background: white;
+            border-radius: 10px;
+            border: 1px dashed #ccc;
+            display: none; /* Escondido por defeito */
+        }
+
+        /* Footer */
+        footer {
+            background: var(--brand-blue);
+            color: white;
+            padding: 40px 5% 20px;
+            margin-top: 40px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+
+        .footer-col h4 { margin-bottom: 15px; color: #fff; }
+        .footer-col ul { list-style: none; padding: 0; }
+        .footer-col ul li { margin-bottom: 8px; }
+        .footer-col a { color: #ccc; text-decoration: none; }
+        .footer-col a:hover { color: var(--brand-orange); text-decoration: underline; }
+        .footer-bottom { text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; font-size: 0.8rem; color: #888; }
+
+        /* Modal de Login */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: modalFadeIn 0.3s ease;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .close-modal {
+            position: absolute; top: 15px; right: 20px; font-size: 1.5rem; font-weight: bold; color: var(--text-muted); cursor: pointer; border: none; background: none;
+        }
+        /* Formulários de Autenticação (Login e Registo) */
+        .auth-form { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+        }
+        .auth-form h2 { 
+            margin: 0 0 10px 0; 
+            color: var(--brand-blue); 
+            text-align: center; 
+        }
+        .auth-links { 
+            text-align: center; 
+            margin-top: 15px; 
+            font-size: 0.9rem; 
+        }
+        .auth-links a { 
+            color: var(--brand-blue); 
+            text-decoration: none; 
+            font-weight: bold; 
+        }
+        .auth-links a:hover { 
+            color: var(--brand-orange); 
+            text-decoration: underline; 
+        }
+        @media (max-width: 900px) {
+            .form-row { grid-template-columns: 1fr; }
+            .btn-primary { width: 100%; }
+            .fleet-header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" class="brand">Planeta<span>Carro</span></a>
+        <nav style="display: flex; align-items: center;">
+            <a href="#stock" style="display: none; @media(min-width: 768px){display:block;}">Veículos em Stock</a>
+            
+            <a href="#login" id="openLoginBtn" style="margin-left: 30px; border: 1px solid var(--brand-blue); padding: 8px 15px; border-radius: 4px; cursor: pointer;">Iniciar Sessão</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Descubra Portugal ao seu ritmo.</h1>
+        <p>Sem taxas ocultas. Cancelamento gratuito até 48h antes.</p>
+
+        <div class="booking-widget">            
+            <form onsubmit="event.preventDefault(); document.getElementById('stock').scrollIntoView();">
+                <div class="form-row">
+                    <div class="input-group">
+                        <label for="pickup">Local</label>
+                        <select id="pickup" required>
+                            <option value="lis">Lisboa</option>
+                            <option value="opo">Porto</option>
+                            <option value="fao">Faro</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="pickup-date">Levantamento</label>
+                        <input type="date" id="pickup-date" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="dropoff-date">Devolução</label>
+                        <input type="date" id="dropoff-date" required>
+                    </div>
+                    <div class="input-group">
+                        <button type="submit" class="btn-primary">Procurar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <div class="trust-bar">
+        <div class="trust-item">✓ Cancelamento Grátis</div>
+        <div class="trust-item">✓ Quilometragem Ilimitada*</div>
+        <div class="trust-item">✓ Assistência em Viagem 24/7</div>
+    </div>
+
+    <section id="stock" class="fleet-section">
+        <div class="fleet-header">
+            <h2>Veículos em Stock</h2>
+            
+            <div class="filter-bar">
+                <select id="categoryFilter" class="filter-select">
+                    <option value="all">Todas as Categorias</option>
+                    <option value="economico">Económico / Mini</option>
+                    <option value="suv">SUV</option>
+                    <option value="premium">Premium</option>
+                </select>
+
+                <select id="transmissionFilter" class="filter-select">
+                    <option value="all">Qualquer Caixa</option>
+                    <option value="manual">Manual</option>
+                    <option value="auto">Automática</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="car-grid" id="carGrid">
+            
+            <div class="car-card" data-category="economico" data-transmission="manual">
+                <img src="https://images.unsplash.com/photo-1609521263047-f8f205293f24?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Renault Clio" class="car-image">
+                <div class="car-details">
+                    <div class="car-category">Económico</div>
+                    <h3 class="car-title">Renault Clio</h3>
+                    <div class="specs">
+                        <span> 5 Lugares</span>
+                        <span> 1 Mala</span>
+                        <span> Manual</span>
+                        <span> Gasolina</span>
+                    </div>
+                    <div class="price-row">
+                        <div class="price">18,50€ <small>/ dia</small></div>
+                        <a href="#" class="btn-primary" style="padding: 8px 15px; height: auto;">Reservar</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="car-card" data-category="suv" data-transmission="auto">
+                <img src="https://images.unsplash.com/photo-1563720223185-11003d516935?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="VW T-Roc" class="car-image">
+                <div class="car-details">
+                    <div class="car-category">SUV</div>
+                    <h3 class="car-title">Volkswagen T-Roc</h3>
+                    <div class="specs">
+                        <span> 5 Lugares</span>
+                        <span> 2 Malas</span>
+                        <span> Automática</span>
+                        <span> Gasolina</span>
+                    </div>
+                    <div class="price-row">
+                        <div class="price">34,00€ <small>/ dia</small></div>
+                        <a href="#" class="btn-primary" style="padding: 8px 15px; height: auto;">Reservar</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="car-card" data-category="premium" data-transmission="auto">
+                <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="BMW Serie 3" class="car-image">
+                <div class="car-details">
+                    <div class="car-category">Premium</div>
+                    <h3 class="car-title">BMW Série 3</h3>
+                    <div class="specs">
+                        <span> 5 Lugares</span>
+                        <span> 3 Malas</span>
+                        <span> Automática</span>
+                        <span> Elétrico</span>
+                    </div>
+                    <div class="price-row">
+                        <div class="price">75,90€ <small>/ dia</small></div>
+                        <a href="#" class="btn-primary" style="padding: 8px 15px; height: auto;">Reservar</a>
+                    </div>
+                </div>
+            </div>
+
+           <div class="car-card" data-category="economico" data-transmission="manual">
+                <img src="https://images.unsplash.com/photo-1617469767053-d3b523a0b982?auto=format&fit=crop&w=800&q=80" alt="Fiat 500" class="car-image">
+                <div class="car-details">
+                    <div class="car-category">Mini</div>
+                    <h3 class="car-title">Fiat 500</h3>
+                    <div class="specs">
+                        <span> 4 Lugares</span>
+                        <span> 1 Mala</span>
+                        <span> Manual</span>
+                        <span> Gasolina</span>
+                    </div>
+                    <div class="price-row">
+                        <div class="price">15,00€ <small>/ dia</small></div>
+                        <a href="#" class="btn-primary" style="padding: 8px 15px; height: auto;">Reservar</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="car-card" data-category="suv" data-transmission="manual">
+                <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80" alt="Jeep Renegade" class="car-image">
+                <div class="car-details">
+                    <div class="car-category">SUV</div>
+                    <h3 class="car-title">Jeep Renegade</h3>
+                    <div class="specs">
+                        <span> 5 Lugares</span>
+                        <span> 2 Malas</span>
+                        <span> Manual</span>
+                        <span> Diesel</span>
+                    </div>
+                    <div class="price-row">
+                        <div class="price">30,50€ <small>/ dia</small></div>
+                        <a href="#" class="btn-primary" style="padding: 8px 15px; height: auto;">Reservar</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="car-card" data-category="premium" data-transmission="auto">
+                <img src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Mercedes C-Class" class="car-image">
+                <div class="car-details">
+                    <div class="car-category">Premium</div>
+                    <h3 class="car-title">Mercedes Classe C</h3>
+                    <div class="specs">
+                        <span>👥 5 Lugares</span>
+                        <span>🧳 3 Malas</span>
+                        <span>⚙️ Automática</span>
+                        <span>⛽ Híbrido</span>
+                    </div>
+                    <div class="price-row">
+                        <div class="price">82,00€ <small>/ dia</small></div>
+                        <a href="#" class="btn-primary" style="padding: 8px 15px; height: auto;">Reservar</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="noResultsMsg" class="no-results">
+                Desculpe, não encontrámos veículos com esses filtros. Tente alterar a sua pesquisa.
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Planeta Carro Portugal. Os preços apresentados incluem IVA.</p>
+        </div>
+    </footer>
+
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="closeLoginBtn" class="close-modal">&times;</button>
+            
+            <form id="loginForm" class="auth-form" onsubmit="event.preventDefault(); alert('Login efetuado com sucesso!'); closeModal();">
+                <h2>Iniciar Sessão</h2>
+                <div class="input-group">
+                    <label>E-mail</label>
+                    <input type="email" required placeholder="O seu e-mail">
+                </div>
+                <div class="input-group">
+                    <label>Palavra-passe</label>
+                    <input type="password" required placeholder="A sua palavra-passe">
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">Entrar</button>
+                
+                <div class="auth-links">
+                    <p>Ainda não tem conta? <a href="#" id="showRegisterBtn">Registe-se aqui</a></p>
+                </div>
+            </form>
+
+            <form id="registerForm" class="auth-form" style="display: none;" onsubmit="event.preventDefault(); alert('Conta criada com sucesso!'); closeModal();">
+                <h2>Criar Conta</h2>
+                <div class="input-group">
+                    <label>Nome Completo</label>
+                    <input type="text" required placeholder="O seu nome">
+                </div>
+                <div class="input-group">
+                    <label>E-mail</label>
+                    <input type="email" required placeholder="O seu e-mail">
+                </div>
+                <div class="input-group">
+                    <label>Palavra-passe</label>
+                    <input type="password" required placeholder="Crie uma palavra-passe">
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">Registar</button>
+                
+                <div class="auth-links">
+                    <p>Já tem conta? <a href="#" id="showLoginBtn">Inicie sessão aqui</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+<div id="reserveModal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="closeReserveBtn" class="close-modal">&times;</button>
+            
+            <form id="reserveForm" class="auth-form" onsubmit="event.preventDefault(); finalizarReserva();">
+                <h2>Concluir Reserva</h2>
+                
+                <div style="background: var(--bg-light); padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: center; border: 1px solid #ddd;">
+                    <h3 id="modalCarTitle" style="margin: 0 0 5px 0; color: var(--brand-blue);">Nome do Carro</h3>
+                    <p id="modalCarPrice" style="margin: 0; font-weight: bold; font-size: 1.2rem; color: var(--brand-orange);">0,00€ / dia</p>
+                </div>
+
+                <div class="input-group">
+                    <label>Data de Levantamento</label>
+                    <input type="date" id="res-pickup" required>
+                </div>
+                
+                <div class="input-group">
+                    <label>Data de Devolução</label>
+                    <input type="date" id="res-dropoff" required>
+                </div>
+                
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">Confirmar Reserva</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        // Lógica do Modal de Autenticação
+        const modal = document.getElementById('loginModal');
+        const openBtn = document.getElementById('openLoginBtn');
+        const closeBtn = document.getElementById('closeLoginBtn');
+        
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const showRegisterBtn = document.getElementById('showRegisterBtn');
+        const showLoginBtn = document.getElementById('showLoginBtn');
+
+        // Abrir Modal (sempre no login por defeito)
+        openBtn.addEventListener('click', (e) => { 
+            e.preventDefault(); 
+            loginForm.style.display = 'flex';
+            registerForm.style.display = 'none';
+            modal.style.display = 'flex'; 
+        });
+
+        // Fechar Modal
+        function closeModal() { modal.style.display = 'none'; }
+        closeBtn.addEventListener('click', closeModal);
+        window.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+        // Alternar para o Registo
+        showRegisterBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'flex';
+        });
+
+        // Alternar para o Login
+        showLoginBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            registerForm.style.display = 'none';
+            loginForm.style.display = 'flex';
+        });
+
+        // Lógica dos Filtros de Stock
+        const categoryFilter = document.getElementById('categoryFilter');
+        const transmissionFilter = document.getElementById('transmissionFilter');
+        const carCards = document.querySelectorAll('.car-card');
+        const noResultsMsg = document.getElementById('noResultsMsg');
+
+        function filterCars() {
+            const selectedCategory = categoryFilter.value;
+            const selectedTransmission = transmissionFilter.value;
+            let visibleCount = 0;
+
+            carCards.forEach(card => {
+                const cardCategory = card.getAttribute('data-category');
+                const cardTransmission = card.getAttribute('data-transmission');
+
+                const matchCategory = (selectedCategory === 'all' || selectedCategory === cardCategory);
+                const matchTransmission = (selectedTransmission === 'all' || selectedTransmission === cardTransmission);
+
+                if (matchCategory && matchTransmission) {
+                    card.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            if (visibleCount === 0) {
+                noResultsMsg.style.display = 'block';
+            } else {
+                noResultsMsg.style.display = 'none';
+            }
+        }
+
+        categoryFilter.addEventListener('change', filterCars);
+        transmissionFilter.addEventListener('change', filterCars);
+        // =========================================
+        // LÓGICA DO SISTEMA DE RESERVAS
+        // =========================================
+        
+        const reserveModal = document.getElementById('reserveModal');
+        const closeReserveBtn = document.getElementById('closeReserveBtn');
+        const reserveButtons = document.querySelectorAll('.car-card .btn-primary'); // Seleciona todos os botões "Reservar"
+        
+        const modalCarTitle = document.getElementById('modalCarTitle');
+        const modalCarPrice = document.getElementById('modalCarPrice');
+
+        // 1. Abrir modal e carregar dados ao clicar em "Reservar"
+        reserveButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Encontrar o cartão do carro onde clicámos
+                const carCard = this.closest('.car-card');
+                
+                // Extrair o nome do carro e o preço desse cartão específico
+                const title = carCard.querySelector('.car-title').innerText;
+                const price = carCard.querySelector('.price').innerText;
+
+                // Injetar esses dados no Modal de Reserva
+                modalCarTitle.innerText = title;
+                modalCarPrice.innerText = price;
+
+                // Mostrar a janela
+                reserveModal.style.display = 'flex';
+            });
+        });
+
+        // 2. Função para fechar o Modal de Reserva
+        function closeReserveModal() {
+            reserveModal.style.display = 'none';
+        }
+        
+        closeReserveBtn.addEventListener('click', closeReserveModal);
+        
+        // Fechar se clicar fora da caixa branca
+        window.addEventListener('click', (e) => {
+            if (e.target === reserveModal) closeReserveModal();
+        });
+
+        // 3. Função final de Sucesso
+        function finalizarReserva() {
+            const carroEscolhido = modalCarTitle.innerText;
+            alert('🎉 Sucesso! A sua reserva para o ' + carroEscolhido + ' foi confirmada. Irá receber um e-mail com os detalhes.');
+            closeReserveModal(); // Fecha a janela após confirmar
+            document.getElementById('reserveForm').reset(); // Limpa as datas do formulário
+        }
+    </script>
+
+</body>
+</html>
