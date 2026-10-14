@@ -1,0 +1,24 @@
+{
+  "name": "SwimForEggs",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "SwimForEggsShared": {
+        "$path": "src/ReplicatedStorage/SwimForEggsShared"
+      }
+    },
+    "ServerScriptService": {
+      "GameBootstrap": {
+        "$path": "src/ServerScriptService/GameBootstrap.server.luau"
+      },
+      "Services": {
+        "$path": "src/ServerScriptService/Services"
+      }
+    },
+    "StarterPlayer": {
+      "StarterPlayerScripts": {
+        "$path": "src/StarterPlayer/StarterPlayerScripts"
+      }
+    }
+  }
+}
